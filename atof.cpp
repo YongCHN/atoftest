@@ -35,8 +35,6 @@ double atof(const char * p)
 			is_dot = true;
 			continue;
 		}
-		 
-		
 		
 		if (is_dot)
 		{

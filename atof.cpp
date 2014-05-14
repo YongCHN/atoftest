@@ -13,7 +13,12 @@ int toInt(char c)
 	return c - '0';
 }
 
-void trim(const char * p, int & headPos, int & tailPos)
+bool is_tail_blank(char c)
+{
+	return c == ' ' || c == 'f' || c == 'F';
+}
+
+void removeblank(const char * p, int & headPos, int & tailPos)
 {
 	int len = strlen(p);
 
@@ -30,7 +35,7 @@ void trim(const char * p, int & headPos, int & tailPos)
 		else
 			headFound = true;
 
-		if (!tailFound && p[len - i - 1] == ' ')
+		if (!tailFound && is_tail_blank(p[len - i - 1]))
 			tailPos++;
 		else
 			tailFound = true;
@@ -43,7 +48,7 @@ double atof(const char * p)
 
 	int head = 0;
 	int bottom = 0;
-	trim(p, head, bottom);
+	removeblank(p, head, bottom);
 	int len = strlen(p) - head - bottom;
 	if (len == 0) throw bad_exception("p is zero length");
 
@@ -53,8 +58,6 @@ double atof(const char * p)
 	double franction = 0;
 	int integer = 0;
 	double percentage = 1.0;
-	 
-	len = ((p[len - 1] == 'f') || (p[len - 1] == 'F')) ? len - 1 : len;
 
 	for (int i = is_negative ? head + 1 : head; i < len; i++)
 	{
@@ -102,6 +105,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	validate(1.2, "1.2");
 	validate(1.2, " 1.2 ");
+        validate(1.2, "1.2 F");
 	validate(1.2, "1.2f");
 	validate(-1.2, "-1.2");
 	validate(-.2, "-.2");
